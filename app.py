@@ -33,8 +33,8 @@ def main() -> None:
         render_header()
         render_step_progress()
         render_active_step()
-    with right:
-        render_api_side_panel()
+    #with right:
+     #   render_api_side_panel()
 
 
 def render_sidebar() -> None:
