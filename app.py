@@ -58,6 +58,7 @@ def init_session_state() -> None:
         "entity": None,
         "connect": None,
         "accounts": [],
+        "entity_products": None,
         "selected_account_ids": [],
         "webhooks": [],
         "subscriptions": [],
@@ -263,13 +264,24 @@ def render_connect_step() -> None:
 
     st.subheader("Connect Liabilities")
     st.write("Ask Method to discover the borrower's liability accounts across its network.")
-    show_summary_card(
-        {
-            "Entity ID": entity["id"],
-            "Borrower": f"{entity['individual']['first_name']} {entity['individual']['last_name']}",
-            "Entity status": entity.get("status", "unknown"),
-        }
-    )
+    summary_items = {
+        "Entity ID": entity["id"],
+        "Borrower": f"{entity['individual']['first_name']} {entity['individual']['last_name']}",
+        "Entity status": entity.get("status", "unknown"),
+    }
+    connect_product = get_connect_product_status()
+    if connect_product:
+        summary_items["Connect product status"] = connect_product.get("status", "unknown")
+    show_summary_card(summary_items)
+
+    if connect_product and connect_product.get("status") != "available":
+        status_error = connect_product.get("status_error") or {}
+        st.warning(
+            f"Connect is currently `{connect_product.get('status', 'unknown')}` for this entity. "
+            f"{status_error.get('message', 'Method did not return an availability message.')}"
+        )
+        if status_error:
+            st.json(status_error)
 
     if connect := st.session_state["connect"]:
         show_success_banner(
@@ -286,6 +298,16 @@ def render_connect_step() -> None:
             return
 
         try:
+            products, products_log = client.list_entity_products(entity["id"])
+            add_log(products_log)
+            st.session_state["entity_products"] = products
+            connect_product = products.get("connect", {})
+            if connect_product and connect_product.get("status") != "available":
+                status_error = connect_product.get("status_error") or {}
+                raise MethodApiError(
+                    status_error.get("message", "Connect is unavailable for this organization."),
+                    response_body=products,
+                )
             connect, log = client.connect_liabilities(entity["id"])
         except MethodApiError as exc:
             render_method_error(exc)
@@ -699,6 +721,15 @@ def has_resource_id(resource: Any) -> bool:
     return isinstance(resource, dict) and bool(resource.get("id"))
 
 
+def get_connect_product_status() -> dict[str, Any] | None:
+    products = st.session_state.get("entity_products")
+    if isinstance(products, dict):
+        connect_product = products.get("connect")
+        if isinstance(connect_product, dict):
+            return connect_product
+    return None
+
+
 def is_supported_account(account: dict[str, Any]) -> bool:
     liability_type = account.get("liability", {}).get("type")
     return liability_type in SUPPORTED_PAYMENT_TYPES
@@ -806,6 +837,7 @@ def reset_poc() -> None:
         "entity",
         "connect",
         "accounts",
+        "entity_products",
         "selected_account_ids",
         "webhooks",
         "subscriptions",

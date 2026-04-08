@@ -6,6 +6,7 @@ from typing import Any
 import copy
 import json
 import time
+import uuid
 
 import requests
 
@@ -160,6 +161,17 @@ class MethodClient:
             return response, log
         raise MethodApiError("Unexpected account list response format.", response_body=response)
 
+    def list_entity_products(self, entity_id: str) -> tuple[dict[str, Any], ApiLogEntry]:
+        response, log = self._request(
+            step=1,
+            label="List Entity Products",
+            method="GET",
+            path=f"/entities/{entity_id}/products",
+        )
+        if isinstance(response, dict):
+            return response, log
+        raise MethodApiError("Unexpected product list response format.", response_body=response)
+
     def create_webhook(
         self,
         *,
@@ -262,6 +274,8 @@ class MethodClient:
             "Content-Type": "application/json",
             "Method-Version": self.method_version,
         }
+        idempotency_key = str(uuid.uuid4())
+        headers["Idempotency-Key"] = idempotency_key
         url = f"{self.base_url}{path}"
         started = time.perf_counter()
         safe_headers = redact_payload(copy.deepcopy(headers))
@@ -298,12 +312,15 @@ class MethodClient:
 
         duration_ms = int((time.perf_counter() - started) * 1000)
         response_body = _parse_response_body(response)
+        request_id = response.headers.get("Request-Id")
         logger.debug(
-            "Method API response received | label=%s | method=%s | url=%s | status=%s | duration_ms=%s | body=%s",
+            "Method API response received | label=%s | method=%s | url=%s | status=%s | request_id=%s | idempotency_key=%s | duration_ms=%s | body=%s",
             label,
             method,
             response.url,
             response.status_code,
+            request_id,
+            idempotency_key,
             duration_ms,
             _serialize_for_log(response_body),
         )
@@ -316,6 +333,7 @@ class MethodClient:
                 "Authorization": f"Bearer {mask_api_key(self.api_key)}",
                 "Content-Type": headers["Content-Type"],
                 "Method-Version": headers["Method-Version"],
+                "Idempotency-Key": idempotency_key,
             },
             request_body=redact_payload(copy.deepcopy(json_body)),
             response_status=response.status_code,
