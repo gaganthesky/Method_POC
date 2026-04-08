@@ -1,0 +1,349 @@
+{
+  "app": {
+    "page_title": "Method x Citi POC",
+    "page_icon": "\ud83c\udfe6",
+    "hero_kicker": "Citi + Method",
+    "hero_title": "Debt Disbursement POC",
+    "hero_description": "Python + Streamlit implementation of the six-step Method flow: create the borrower, connect liabilities, subscribe to updates, generate payment instruments, and optionally issue a Method payment.",
+    "steps": [
+      "Create Entity",
+      "Connect Liabilities",
+      "Retrieve Accounts",
+      "Subscribe Updates",
+      "Payment Instruments",
+      "Disburse Funds"
+    ],
+    "links": {
+      "demo": "https://citi-demo.methodfi.dev/",
+      "docs": "https://docs.methodfi.com/2025-12-01/reference/introduction"
+    }
+  },
+  "method": {
+    "default_base_url": "https://dev.methodfi.com",
+    "environment_options": [
+      "https://dev.methodfi.com",
+      "https://sandbox.methodfi.com",
+      "https://production.methodfi.com"
+    ],
+    "default_method_version": "2025-12-01",
+    "account_filters": {
+      "type": "liability",
+      "status": "active",
+      "expand": [
+        "update"
+      ]
+    },
+    "supported_payment_types": [
+      "credit_card",
+      "personal_loan"
+    ],
+    "webhook_event_types": [
+      "update.create",
+      "update.update"
+    ],
+    "subscription_enroll": "update",
+    "payment_instrument_type": "inbound_achwire_payment",
+    "payment_instrument_response_key": "inbound_achwire_payment"
+  },
+  "demo_borrower": {
+    "first_name": "Kevin",
+    "last_name": "Doyle",
+    "email": "kevin.doyle@gmail.com",
+    "phone": "+15121231113",
+    "dob": "1997-03-18",
+    "ssn": "123456789",
+    "line1": "3300 N Interstate 35",
+    "line2": "",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78705"
+  },
+  "defaults": {
+    "payment_description": "Loan Pmt",
+    "payment_amount_usd": "50.00"
+  },
+  "reference_responses": [
+    {
+      "title": "1. Create Entity",
+      "endpoint": "POST /entities",
+      "response": {
+        "id": "ent_BzirqpLEm3BW7",
+        "type": "individual",
+        "individual": {
+          "first_name": "Kevin",
+          "last_name": "Doyle",
+          "phone": "+15121231113",
+          "dob": "1997-03-18",
+          "email": "kevin.doyle@gmail.com",
+          "ssn_4": null,
+          "ssn": null
+        },
+        "error": null,
+        "address": {
+          "line1": "3300 N Interstate 35",
+          "line2": null,
+          "city": "Austin",
+          "state": "TX",
+          "zip": "78705"
+        },
+        "status": "incomplete",
+        "verification": {
+          "identity": {
+            "verified": false,
+            "matched": false,
+            "latest_verification_session": null,
+            "methods": [
+              "element",
+              "kba"
+            ]
+          },
+          "phone": {
+            "verified": true,
+            "latest_verification_session": "evf_P4QXNj93Y9J8L",
+            "methods": []
+          }
+        },
+        "connect": null,
+        "credit_score": null,
+        "products": [
+          "identity"
+        ],
+        "restricted_products": [
+          "connect",
+          "credit_score",
+          "attribute"
+        ],
+        "subscriptions": [],
+        "available_subscriptions": [
+          "connect",
+          "credit_score"
+        ],
+        "restricted_subscriptions": [],
+        "metadata": null,
+        "created_at": "2023-10-24T21:50:53.024Z",
+        "updated_at": "2023-10-24T21:50:53.024Z"
+      }
+    },
+    {
+      "title": "2. Connect Liabilities",
+      "endpoint": "POST /entities/{ent_id}/connect",
+      "response": {
+        "id": "cxn_4ewMmBbjYDMR4",
+        "entity_id": "ent_BzirqpLEm3BW7",
+        "status": "completed",
+        "accounts": [
+          "acc_eKKmrXDpJBKgw",
+          "acc_GV8WbmJW7KGRy",
+          "acc_MLPKh9gQDDbT8",
+          "acc_LbXE8wVYJLrKt",
+          "acc_J3P9fayDFjpAy",
+          "acc_eFFRV9zmpLREK"
+        ],
+        "error": null,
+        "created_at": "2024-04-12T14:56:46.645Z",
+        "updated_at": "2024-04-12T14:56:46.645Z"
+      }
+    },
+    {
+      "title": "3. List Accounts",
+      "endpoint": "GET /accounts?holder_id={ent_id}&type=liability&status=active&expand[]=update",
+      "response": {
+        "data": [
+          {
+            "id": "acc_GV8WbmJW7KGRy",
+            "holder_id": "ent_BzirqpLEm3BW7",
+            "status": "active",
+            "type": "liability",
+            "liability": {
+              "mch_id": "mch_200145",
+              "mask": "5678",
+              "ownership": "primary",
+              "fingerprint": null,
+              "type": "credit_card",
+              "name": "Chase Sapphire Reserve"
+            },
+            "update": {
+              "id": "upt_TXDTR7Amyz7Az",
+              "status": "completed",
+              "account_id": "acc_GV8WbmJW7KGRy",
+              "source": "direct",
+              "type": "credit_card",
+              "credit_card": {
+                "available_credit": 120000,
+                "balance": 80000,
+                "closed_at": null,
+                "credit_limit": 200000,
+                "interest_rate_percentage_max": 23.5,
+                "interest_rate_percentage_min": 12,
+                "interest_rate_type": "variable",
+                "last_payment_amount": 5000,
+                "last_payment_date": "2024-04-05",
+                "next_payment_due_date": "2024-05-01",
+                "next_payment_minimum_amount": 4000,
+                "opened_at": "2018-10-30",
+                "sub_type": "flexible_spending",
+                "usage_pattern": "transactor"
+              }
+            },
+            "products": [
+              "payment"
+            ],
+            "created_at": "2024-02-12T18:57:57.857Z",
+            "updated_at": "2024-03-20T04:43:21.655Z"
+          },
+          {
+            "id": "acc_J3P9fayDFjpAy",
+            "holder_id": "ent_BzirqpLEm3BW7",
+            "status": "active",
+            "type": "liability",
+            "liability": {
+              "mch_id": "mch_500332",
+              "mask": "7890",
+              "ownership": "primary",
+              "fingerprint": null,
+              "type": "personal_loan",
+              "name": "SoFi Personal Loan"
+            },
+            "update": {
+              "id": "upt_PLw8kfjskTTCJ",
+              "status": "completed",
+              "account_id": "acc_J3P9fayDFjpAy",
+              "source": "snapshot",
+              "type": "personal_loan",
+              "personal_loan": {
+                "balance": 750000,
+                "original_loan_amount": 1500000,
+                "last_payment_amount": 35000,
+                "last_payment_date": "2024-04-10",
+                "next_payment_due_date": "2024-05-10",
+                "next_payment_minimum_amount": 35000,
+                "opened_at": "2022-01-20",
+                "interest_rate_percentage": 8.99,
+                "interest_rate_type": "fixed",
+                "term_length": 60,
+                "sub_type": "unsecured"
+              }
+            },
+            "products": [
+              "payment"
+            ],
+            "created_at": "2024-02-12T18:57:57.857Z",
+            "updated_at": "2024-03-20T04:43:21.655Z"
+          },
+          {
+            "id": "acc_MLPKh9gQDDbT8",
+            "holder_id": "ent_BzirqpLEm3BW7",
+            "status": "active",
+            "type": "liability",
+            "liability": {
+              "mch_id": "mch_100893",
+              "mask": "9012",
+              "ownership": "primary",
+              "fingerprint": null,
+              "type": "auto_loan",
+              "name": "Toyota Financial Services"
+            },
+            "update": {
+              "id": "upt_QRz8kfjskTTCJ",
+              "status": "completed",
+              "account_id": "acc_MLPKh9gQDDbT8",
+              "source": "snapshot",
+              "type": "auto_loan",
+              "auto_loan": {
+                "balance": 1850000,
+                "original_loan_amount": 3200000,
+                "last_payment_amount": 45000,
+                "last_payment_date": "2024-04-01",
+                "next_payment_due_date": "2024-05-01",
+                "next_payment_minimum_amount": 45000,
+                "opened_at": "2021-06-15",
+                "interest_rate_percentage": 3.9,
+                "interest_rate_type": "fixed",
+                "term_length": 72,
+                "sub_type": "loan"
+              }
+            },
+            "products": [
+              "payment"
+            ],
+            "created_at": "2024-02-12T18:57:57.857Z",
+            "updated_at": "2024-03-20T04:43:21.655Z"
+          }
+        ]
+      }
+    },
+    {
+      "title": "4a. Create Webhook",
+      "endpoint": "POST /webhooks",
+      "response": {
+        "id": "whk_cSGjA6d9N8y8R",
+        "type": "update.create",
+        "url": "https://docs.methodfi.com/2025-12-01/reference/webhooks/overview",
+        "metadata": null,
+        "created_at": "2020-12-09T00:41:05.647Z",
+        "updated_at": "2020-12-09T00:41:05.647Z"
+      }
+    },
+    {
+      "title": "4b. Subscribe Account",
+      "endpoint": "POST /accounts/{acc_id}/subscriptions",
+      "response": {
+        "id": "sub_xM4VcfRWcJP8D",
+        "name": "update",
+        "status": "active",
+        "latest_request_id": null,
+        "created_at": "2024-04-10T22:14:21.951Z",
+        "updated_at": "2024-04-10T22:14:21.951Z"
+      }
+    },
+    {
+      "title": "5. Create Payment Instrument",
+      "endpoint": "POST /accounts/{acc_id}/payment_instruments",
+      "response": {
+        "success": true,
+        "data": {
+          "id": "pmt_inst_kR9p2hTMqWz81",
+          "account_id": "acc_GV8WbmJW7KGRy",
+          "type": "inbound_achwire_payment",
+          "card": null,
+          "network_token": null,
+          "inbound_achwire_payment": {
+            "account_number": "68472913",
+            "routing_number": "367537407"
+          },
+          "chargeable": true,
+          "status": "completed",
+          "error": null,
+          "created_at": "2024-04-12T14:56:46.645Z",
+          "updated_at": "2024-04-12T14:56:46.645Z"
+        },
+        "message": null
+      }
+    },
+    {
+      "title": "6. Create Payment",
+      "endpoint": "POST /payments",
+      "response": {
+        "id": "pmt_VeCfmkwGKb",
+        "source": "acc_source123456",
+        "destination": "acc_GV8WbmJW7KGRy",
+        "amount": 5000,
+        "description": "Loan Pmt",
+        "status": "pending",
+        "estimated_completion_date": "2024-03-21",
+        "source_trace_id": null,
+        "source_settlement_date": "2024-03-15",
+        "source_status": "pending",
+        "destination_trace_id": null,
+        "destination_settlement_date": "2024-03-21",
+        "destination_status": "pending",
+        "reversal_id": null,
+        "fee": null,
+        "error": null,
+        "metadata": null,
+        "created_at": "2024-04-12T14:56:46.645Z",
+        "updated_at": "2024-04-12T14:56:46.645Z"
+      }
+    }
+  ]
+}
