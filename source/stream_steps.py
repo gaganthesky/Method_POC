@@ -12,8 +12,9 @@ from source.stream_util import (
     format_account_option,
     get_account_summary,
     get_connect_product_status,
+    get_test_account_profile,
+    get_test_account_profiles,
     has_resource_id,
-    is_supported_account,
     parse_dollars_to_cents,
     render_invalid_state,
     render_method_error,
@@ -45,6 +46,26 @@ def render_create_entity_step() -> None:
 
     if entity := st.session_state["entity"]:
         show_success_banner(f"Entity ready: `{entity['id']}`")
+
+    test_profiles = get_test_account_profiles()
+    phone_options = [profile["phone"] for profile in test_profiles]
+    if st.session_state.get("selected_test_phone") not in phone_options:
+        st.session_state["selected_test_phone"] = phone_options[0]
+
+    selected_test_phone = st.selectbox(
+        "Dev test phone number",
+        phone_options,
+        index=phone_options.index(st.session_state["selected_test_phone"]),
+        help="Select a Method-provisioned dev phone number to prefill the borrower profile.",
+    )
+    st.session_state["selected_test_phone"] = selected_test_phone
+
+    if st.session_state.get("applied_test_phone") != selected_test_phone:
+        selected_profile = get_test_account_profile(selected_test_phone)
+        if selected_profile is not None:
+            borrower_form = selected_profile
+            st.session_state["borrower_form"] = selected_profile.copy()
+            st.session_state["applied_test_phone"] = selected_test_phone
 
     with st.form("create_entity_form"):
         col1, col2 = st.columns(2)
@@ -190,14 +211,10 @@ def render_accounts_step() -> None:
 
     accounts = st.session_state["accounts"]
     selected_ids: list[str] = []
-    supported_count = 0
 
     metric_col1, metric_col2, metric_col3 = st.columns(3)
     metric_col1.metric("Accounts found", len(accounts))
-    metric_col2.metric(
-        "Supported for disbursement",
-        sum(1 for account in accounts if is_supported_account(account)),
-    )
+    metric_col2.metric("Selectable accounts", len(accounts))
     metric_col3.metric("Currently selected", len(st.session_state["selected_account_ids"]))
 
     st.markdown("<div class='spacer-12'></div>", unsafe_allow_html=True)
@@ -209,12 +226,7 @@ def render_accounts_step() -> None:
         if key not in st.session_state:
             st.session_state[key] = account_id in st.session_state["selected_account_ids"]
 
-        supported = is_supported_account(account)
-        if supported:
-            supported_count += 1
-
         summary = get_account_summary(account)
-        status_badge = "Supported" if supported else "Unsupported in this POC"
         st.markdown(
             f"""
             <div class="account-card">
@@ -223,7 +235,7 @@ def render_accounts_step() -> None:
                   <div class="account-name">{liability.get('name', account_id)}</div>
                   <div class="account-sub">{liability.get('type', 'liability')} ••••{liability.get('mask', '----')}</div>
                 </div>
-                <div class="account-badge {'badge-ok' if supported else 'badge-muted'}">{status_badge}</div>
+                <div class="account-badge badge-ok">Available</div>
               </div>
               <div class="account-grid">
                 <div><span>Balance</span><strong>{summary.get('balance', '—')}</strong></div>
@@ -238,19 +250,11 @@ def render_accounts_step() -> None:
         checked = st.checkbox(
             f"Select {liability.get('name', account_id)}",
             key=key,
-            disabled=not supported,
         )
         if checked:
             selected_ids.append(account_id)
 
     st.session_state["selected_account_ids"] = selected_ids
-
-    if supported_count == 0:
-        st.warning(
-            "No supported account types were returned. This POC currently enables: "
-            f"{', '.join(METHOD_REFERENCE['supported_payment_types'])}."
-        )
-        return
 
     if st.button(
         f"Continue with {len(selected_ids)} account(s) →",
