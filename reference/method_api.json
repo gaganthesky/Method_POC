@@ -14,10 +14,6 @@
         "update"
       ]
     },
-    "supported_payment_types": [
-      "credit_card",
-      "personal_loan"
-    ],
     "webhook_event_types": [
       "update.create",
       "update.update"

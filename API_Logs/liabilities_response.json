@@ -1,0 +1,917 @@
+{
+    "success": true,
+    "data": [
+        {
+            "id": "acc_nJX9jKTUbMhdB",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_302086",
+                "mask": "1580",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "credit_card",
+                "sub_type": "flexible_spending",
+                "name": "Chase Credit Card"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_ijYxD9acxdiey",
+                "account_id": "acc_nJX9jKTUbMhdB",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:07:44.371Z",
+                "type": "credit_card",
+                "credit_card": {
+                    "sub_type": "flexible_spending",
+                    "opened_at": "2016-12-20",
+                    "closed_at": null,
+                    "balance": 1866688,
+                    "last_payment_amount": 100000,
+                    "last_payment_date": "2023-01-04",
+                    "next_payment_due_date": "2023-02-09",
+                    "next_payment_minimum_amount": 51060,
+                    "interest_rate_type": "variable",
+                    "interest_rate_percentage_max": 27.5,
+                    "interest_rate_percentage_min": 20.5,
+                    "available_credit": 930000,
+                    "credit_limit": 2800000,
+                    "usage_pattern": null
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.331Z",
+                "updated_at": "2026-04-08T17:07:44.371Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [
+                "payment",
+                "payment_instrument.inbound_achwire_payment"
+            ],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "card_brand",
+                "payment_instrument.card",
+                "payment_instrument.network_token",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot",
+                "update"
+            ],
+            "restricted_subscriptions": [
+                "card_brand",
+                "payment_instrument.card",
+                "payment_instrument.network_token",
+                "transaction"
+            ],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.348Z",
+            "updated_at": "2026-04-08T17:07:44.406Z"
+        },
+        {
+            "id": "acc_XiiXh66DK8jiN",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_30",
+                "mask": "9544",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "credit_card",
+                "sub_type": "flexible_spending",
+                "name": "PayPal - Credit Cards"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_tJJeNMUYVTYkC",
+                "account_id": "acc_XiiXh66DK8jiN",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:07:58.470Z",
+                "type": "credit_card",
+                "credit_card": {
+                    "sub_type": "flexible_spending",
+                    "opened_at": "2013-10-30",
+                    "closed_at": null,
+                    "balance": 300100,
+                    "last_payment_amount": 3900,
+                    "last_payment_date": "2020-10-01",
+                    "next_payment_due_date": null,
+                    "next_payment_minimum_amount": null,
+                    "interest_rate_type": "variable",
+                    "interest_rate_percentage_max": 25.5,
+                    "interest_rate_percentage_min": 18,
+                    "available_credit": null,
+                    "credit_limit": 400000,
+                    "usage_pattern": null
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.292Z",
+                "updated_at": "2026-04-08T17:07:58.470Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [
+                "payment",
+                "payment_instrument.inbound_achwire_payment"
+            ],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "payment_instrument.card",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update",
+                "update.snapshot"
+            ],
+            "restricted_subscriptions": [
+                "payment_instrument.card"
+            ],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.348Z",
+            "updated_at": "2026-04-08T17:07:58.583Z"
+        },
+        {
+            "id": "acc_6Va3AHEN93848",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_303858",
+                "mask": "5823",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "credit_card",
+                "sub_type": "charge",
+                "name": "Discount Tire Credit Card"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_47jm7EGfmmiRJ",
+                "account_id": "acc_6Va3AHEN93848",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:07:52.331Z",
+                "type": "credit_card",
+                "credit_card": {
+                    "sub_type": "charge",
+                    "opened_at": "2020-08-18",
+                    "closed_at": null,
+                    "balance": 0,
+                    "last_payment_amount": 20100,
+                    "last_payment_date": "2024-01-03",
+                    "next_payment_due_date": null,
+                    "next_payment_minimum_amount": 0,
+                    "interest_rate_type": "variable",
+                    "interest_rate_percentage_max": 27.5,
+                    "interest_rate_percentage_min": 21,
+                    "available_credit": 200000,
+                    "credit_limit": 200000,
+                    "usage_pattern": "dormant"
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.271Z",
+                "updated_at": "2026-04-08T17:07:52.331Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "payment_instrument.card",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update",
+                "update.snapshot"
+            ],
+            "restricted_subscriptions": [
+                "payment_instrument.card"
+            ],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.350Z",
+            "updated_at": "2026-04-08T17:07:52.412Z"
+        },
+        {
+            "id": "acc_HyVLpmULidYkV",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_300284",
+                "mask": "1234",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "student_loans",
+                "sub_type": "federal",
+                "name": "Aidvantage Student Loans"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_XF6TpfD4ppQVi",
+                "account_id": "acc_HyVLpmULidYkV",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:08:19.836Z",
+                "type": "student_loans",
+                "student_loans": {
+                    "sub_type": "federal",
+                    "opened_at": "2015-08-18",
+                    "closed_at": null,
+                    "balance": 1782800,
+                    "last_payment_amount": 135400,
+                    "last_payment_date": "2023-11-01",
+                    "next_payment_due_date": "2023-12-01",
+                    "next_payment_minimum_amount": 2100,
+                    "interest_rate_type": null,
+                    "disbursements": [
+                        {
+                            "sequence": 1,
+                            "balance": 326300,
+                            "last_payment_amount": 3500,
+                            "last_payment_date": "2023-11-01",
+                            "next_payment_due_date": "2023-12-01",
+                            "next_payment_minimum_amount": 3500,
+                            "disbursed_at": "2015-08-18",
+                            "interest_rate_percentage": 4.29,
+                            "interest_rate_type": "fixed",
+                            "original_loan_amount": 350000,
+                            "term_length": 120,
+                            "closed_at": null,
+                            "interest_rate_source": "method"
+                        },
+                        {
+                            "sequence": 2,
+                            "balance": 521600,
+                            "last_payment_amount": 5400,
+                            "last_payment_date": "2023-11-01",
+                            "next_payment_due_date": "2023-12-01",
+                            "next_payment_minimum_amount": 5500,
+                            "disbursed_at": "2016-08-16",
+                            "interest_rate_percentage": 3.76,
+                            "interest_rate_type": "fixed",
+                            "original_loan_amount": 550000,
+                            "term_length": 120,
+                            "closed_at": null,
+                            "interest_rate_source": "method"
+                        },
+                        {
+                            "sequence": 3,
+                            "balance": 146600,
+                            "last_payment_amount": 1500,
+                            "last_payment_date": "2023-11-01",
+                            "next_payment_due_date": "2023-12-01",
+                            "next_payment_minimum_amount": 1600,
+                            "disbursed_at": "2017-08-25",
+                            "interest_rate_percentage": 4.45,
+                            "interest_rate_type": "fixed",
+                            "original_loan_amount": 160000,
+                            "term_length": 120,
+                            "closed_at": null,
+                            "interest_rate_source": "method"
+                        },
+                        {
+                            "sequence": 4,
+                            "balance": 258300,
+                            "last_payment_amount": 2700,
+                            "last_payment_date": "2023-11-01",
+                            "next_payment_due_date": "2023-12-01",
+                            "next_payment_minimum_amount": 2700,
+                            "disbursed_at": "2018-01-22",
+                            "interest_rate_percentage": 4.45,
+                            "interest_rate_type": "fixed",
+                            "original_loan_amount": 275000,
+                            "term_length": 120,
+                            "closed_at": null,
+                            "interest_rate_source": "method"
+                        },
+                        {
+                            "sequence": 5,
+                            "balance": 3600,
+                            "last_payment_amount": 135400,
+                            "last_payment_date": "2023-11-01",
+                            "next_payment_due_date": "2023-12-01",
+                            "next_payment_minimum_amount": 2100,
+                            "disbursed_at": "2018-08-22",
+                            "interest_rate_percentage": 5.05,
+                            "interest_rate_type": "fixed",
+                            "original_loan_amount": 200000,
+                            "term_length": 120,
+                            "closed_at": null,
+                            "interest_rate_source": "method"
+                        },
+                        {
+                            "sequence": 6,
+                            "balance": 526400,
+                            "last_payment_amount": 5600,
+                            "last_payment_date": "2023-11-01",
+                            "next_payment_due_date": "2023-12-01",
+                            "next_payment_minimum_amount": 5700,
+                            "disbursed_at": "2018-08-22",
+                            "interest_rate_percentage": 5.05,
+                            "interest_rate_type": "fixed",
+                            "original_loan_amount": 550000,
+                            "term_length": 120,
+                            "closed_at": null,
+                            "interest_rate_source": "method"
+                        }
+                    ],
+                    "original_loan_amount": 2085000,
+                    "interest_rate_percentage": null,
+                    "interest_rate_source": null
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.431Z",
+                "updated_at": "2026-04-08T17:08:19.836Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [
+                "payment",
+                "payment_instrument.inbound_achwire_payment"
+            ],
+            "restricted_products": [
+                "balance",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update",
+                "update.snapshot"
+            ],
+            "restricted_subscriptions": [],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.350Z",
+            "updated_at": "2026-04-08T17:08:19.876Z"
+        },
+        {
+            "id": "acc_yGcEAHUk6B6WC",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_311130",
+                "mask": "4512",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "auto_loan",
+                "sub_type": "loan",
+                "name": "Volvo Cars Auto Loan"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_DMMtgGyae7hXp",
+                "account_id": "acc_yGcEAHUk6B6WC",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:07:30.041Z",
+                "type": "auto_loan",
+                "auto_loan": {
+                    "sub_type": "loan",
+                    "opened_at": null,
+                    "closed_at": null,
+                    "balance": 6083960,
+                    "last_payment_amount": 88800,
+                    "last_payment_date": "2022-05-12",
+                    "next_payment_due_date": "2022-06-01",
+                    "next_payment_minimum_amount": 88883,
+                    "interest_rate_type": "fixed",
+                    "expected_payoff_date": null,
+                    "original_loan_amount": 7351000,
+                    "term_length": 84,
+                    "interest_rate_percentage": 5.7,
+                    "interest_rate_source": "financial_institution"
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.272Z",
+                "updated_at": "2026-04-08T17:07:30.042Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [
+                "payment",
+                "payment_instrument.inbound_achwire_payment"
+            ],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "payoff",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot",
+                "update"
+            ],
+            "restricted_subscriptions": [],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.350Z",
+            "updated_at": "2026-04-08T17:07:30.116Z"
+        },
+        {
+            "id": "acc_keAYFg4zUGiai",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_300485",
+                "mask": "0988",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "credit_card",
+                "sub_type": "flexible_spending",
+                "name": "American Express Credit Card"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_taf49WJkBfr9B",
+                "account_id": "acc_keAYFg4zUGiai",
+                "status": "completed",
+                "source": "snapshot",
+                "data_as_of": "2026-04-08T17:04:50.582Z",
+                "type": "credit_card",
+                "credit_card": {
+                    "sub_type": "flexible_spending",
+                    "opened_at": "2018-07-25",
+                    "closed_at": null,
+                    "balance": 0,
+                    "last_payment_amount": 5400,
+                    "last_payment_date": "2023-04-03",
+                    "next_payment_due_date": "2023-06-03",
+                    "next_payment_minimum_amount": 5400,
+                    "interest_rate_type": "variable",
+                    "interest_rate_percentage_max": 28.5,
+                    "interest_rate_percentage_min": 20,
+                    "available_credit": 2000000,
+                    "credit_limit": 2000000,
+                    "usage_pattern": null
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:50.582Z",
+                "updated_at": "2026-04-08T17:04:50.582Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [],
+            "restricted_products": [
+                "attribute",
+                "payment_instrument.card"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot"
+            ],
+            "restricted_subscriptions": [
+                "payment_instrument.card"
+            ],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.349Z",
+            "updated_at": "2026-04-08T17:04:50.385Z"
+        },
+        {
+            "id": "acc_AeiMNkcTfR6dK",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_301149",
+                "mask": "8382",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "credit_card",
+                "sub_type": "flexible_spending",
+                "name": "Barclays Bank Credit Card"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_GKcEGckLciALt",
+                "account_id": "acc_AeiMNkcTfR6dK",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:07:37.986Z",
+                "type": "credit_card",
+                "credit_card": {
+                    "sub_type": "flexible_spending",
+                    "opened_at": "2021-06-29",
+                    "closed_at": null,
+                    "balance": 121661,
+                    "last_payment_amount": 23100,
+                    "last_payment_date": "2022-07-19",
+                    "next_payment_due_date": "2022-08-19",
+                    "next_payment_minimum_amount": 0,
+                    "interest_rate_type": "variable",
+                    "interest_rate_percentage_max": 28.5,
+                    "interest_rate_percentage_min": 21.5,
+                    "available_credit": 403300,
+                    "credit_limit": null,
+                    "usage_pattern": null
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.291Z",
+                "updated_at": "2026-04-08T17:07:37.986Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "payment",
+                "payment_instrument.card",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot",
+                "update"
+            ],
+            "restricted_subscriptions": [
+                "payment_instrument.card"
+            ],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.349Z",
+            "updated_at": "2026-04-08T17:07:38.085Z"
+        },
+        {
+            "id": "acc_e96AYVBc9J7XM",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_311289",
+                "mask": "0332",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "credit_card",
+                "sub_type": "flexible_spending",
+                "name": "Wells Fargo Credit Card"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_aMdmf4Tfp8Pqh",
+                "account_id": "acc_e96AYVBc9J7XM",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:07:20.650Z",
+                "type": "credit_card",
+                "credit_card": {
+                    "sub_type": "flexible_spending",
+                    "opened_at": "2013-07-31",
+                    "closed_at": null,
+                    "balance": 681300,
+                    "last_payment_amount": null,
+                    "last_payment_date": "2022-10-01",
+                    "next_payment_due_date": "2022-11-01",
+                    "next_payment_minimum_amount": 24100,
+                    "interest_rate_type": "variable",
+                    "interest_rate_percentage_max": 25.5,
+                    "interest_rate_percentage_min": 18,
+                    "available_credit": null,
+                    "credit_limit": 1200000,
+                    "usage_pattern": null
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.359Z",
+                "updated_at": "2026-04-08T17:07:20.650Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [
+                "payment",
+                "payment_instrument.inbound_achwire_payment"
+            ],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "card_brand",
+                "payment_instrument.card",
+                "payment_instrument.network_token",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot",
+                "update"
+            ],
+            "restricted_subscriptions": [
+                "card_brand",
+                "payment_instrument.card",
+                "payment_instrument.network_token",
+                "transaction"
+            ],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.349Z",
+            "updated_at": "2026-04-08T17:07:20.693Z"
+        },
+        {
+            "id": "acc_KMzDkDfnrC6mc",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_300665",
+                "mask": "0000",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "credit_card",
+                "sub_type": "flexible_spending",
+                "name": "Apple Card"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_8jgt68btTgCfM",
+                "account_id": "acc_KMzDkDfnrC6mc",
+                "status": "completed",
+                "source": "snapshot",
+                "data_as_of": "2026-04-08T17:04:50.657Z",
+                "type": "credit_card",
+                "credit_card": {
+                    "sub_type": "flexible_spending",
+                    "opened_at": "2019-08-12",
+                    "closed_at": null,
+                    "balance": 625300,
+                    "last_payment_amount": 80000,
+                    "last_payment_date": "2022-10-01",
+                    "next_payment_due_date": "2022-11-01",
+                    "next_payment_minimum_amount": 80000,
+                    "interest_rate_type": "variable",
+                    "interest_rate_percentage_max": 25.5,
+                    "interest_rate_percentage_min": 18,
+                    "available_credit": 900000,
+                    "credit_limit": 1525300,
+                    "usage_pattern": null
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:50.657Z",
+                "updated_at": "2026-04-08T17:04:50.657Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [],
+            "restricted_products": [
+                "attribute",
+                "card_brand",
+                "payment_instrument.card",
+                "payment_instrument.network_token"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot"
+            ],
+            "restricted_subscriptions": [
+                "card_brand",
+                "payment_instrument.card",
+                "payment_instrument.network_token"
+            ],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.349Z",
+            "updated_at": "2026-04-08T17:04:50.415Z"
+        },
+        {
+            "id": "acc_xReKYVVpUjwep",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_183",
+                "mask": "4323",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "mortgage",
+                "sub_type": null,
+                "name": "Chase Mortgage"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_6VQFj9LgB46nt",
+                "account_id": "acc_xReKYVVpUjwep",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:08:12.617Z",
+                "type": "mortgage",
+                "mortgage": {
+                    "sub_type": null,
+                    "opened_at": "2022-08-12",
+                    "closed_at": null,
+                    "balance": 160431000,
+                    "last_payment_amount": 669500,
+                    "last_payment_date": "2023-01-01",
+                    "next_payment_due_date": "2023-02-01",
+                    "next_payment_minimum_amount": 669500,
+                    "interest_rate_type": "fixed",
+                    "expected_payoff_date": "2052-08-12",
+                    "original_loan_amount": 164000000,
+                    "term_length": 360,
+                    "interest_rate_percentage": 3.09,
+                    "interest_rate_source": "public_data"
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.530Z",
+                "updated_at": "2026-04-08T17:08:12.618Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [
+                "payment",
+                "payment_instrument.inbound_achwire_payment"
+            ],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "payoff",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot",
+                "update"
+            ],
+            "restricted_subscriptions": [],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.350Z",
+            "updated_at": "2026-04-08T17:08:12.687Z"
+        },
+        {
+            "id": "acc_8WepVnp3MeaQQ",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_309496",
+                "mask": "6612",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "personal_loan",
+                "sub_type": "secured",
+                "name": "Sheffield Financial Personal Loan"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_mqt3GwqKY96qj",
+                "account_id": "acc_8WepVnp3MeaQQ",
+                "status": "completed",
+                "source": "direct",
+                "data_as_of": "2026-04-08T17:08:26.613Z",
+                "type": "personal_loan",
+                "personal_loan": {
+                    "sub_type": "secured",
+                    "opened_at": "2021-06-17",
+                    "closed_at": null,
+                    "balance": 475700,
+                    "last_payment_amount": 23100,
+                    "last_payment_date": "2023-08-24",
+                    "next_payment_due_date": "2023-09-24",
+                    "next_payment_minimum_amount": 23100,
+                    "interest_rate_type": "fixed",
+                    "available_credit": null,
+                    "original_loan_amount": 1066100,
+                    "term_length": 48,
+                    "interest_rate_percentage": 1.95,
+                    "interest_rate_source": "method"
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:51.279Z",
+                "updated_at": "2026-04-08T17:08:26.613Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [
+                "payment",
+                "payment_instrument.inbound_achwire_payment"
+            ],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot",
+                "update"
+            ],
+            "restricted_subscriptions": [],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.352Z",
+            "updated_at": "2026-04-08T17:08:26.618Z"
+        },
+        {
+            "id": "acc_HfTyBhDaEkUcj",
+            "holder_id": "ent_teNgFLHaeewyf",
+            "status": "active",
+            "consent_status": "approved",
+            "type": "liability",
+            "liability": {
+                "mch_id": "mch_306477",
+                "mask": "3892",
+                "ownership": "primary",
+                "fingerprint": null,
+                "type": "personal_loan",
+                "sub_type": "unsecured",
+                "name": "KeyBank Personal Loan"
+            },
+            "latest_verification_session": null,
+            "update": {
+                "id": "upt_n4NqqLTFxmiyW",
+                "account_id": "acc_HfTyBhDaEkUcj",
+                "status": "completed",
+                "source": "snapshot",
+                "data_as_of": "2026-04-08T17:04:50.645Z",
+                "type": "personal_loan",
+                "personal_loan": {
+                    "sub_type": "unsecured",
+                    "opened_at": "2021-03-17",
+                    "closed_at": null,
+                    "balance": 1234100,
+                    "last_payment_amount": 45700,
+                    "last_payment_date": "2023-08-01",
+                    "next_payment_due_date": "2023-09-01",
+                    "next_payment_minimum_amount": 45700,
+                    "interest_rate_type": "fixed",
+                    "available_credit": null,
+                    "original_loan_amount": 2200000,
+                    "term_length": 60,
+                    "interest_rate_percentage": 9.41,
+                    "interest_rate_source": "method"
+                },
+                "error": null,
+                "created_at": "2026-04-08T17:04:50.645Z",
+                "updated_at": "2026-04-08T17:04:50.645Z"
+            },
+            "balance": null,
+            "payoff": null,
+            "card_brand": null,
+            "attribute": null,
+            "products": [
+                "payment",
+                "payment_instrument.inbound_achwire_payment"
+            ],
+            "restricted_products": [
+                "attribute",
+                "balance",
+                "update"
+            ],
+            "subscriptions": [],
+            "available_subscriptions": [
+                "update.snapshot",
+                "update"
+            ],
+            "restricted_subscriptions": [],
+            "error": null,
+            "metadata": null,
+            "created_at": "2026-04-08T17:04:50.352Z",
+            "updated_at": "2026-04-08T17:04:51.789Z"
+        }
+    ]

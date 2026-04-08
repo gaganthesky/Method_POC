@@ -6,7 +6,7 @@ import os
 
 import streamlit as st
 
-from source.config import DEFAULT_BORROWER, DEFAULTS_REFERENCE, METHOD_REFERENCE, REFERENCE_RESPONSES
+from source.config import DEFAULT_BORROWER, DEFAULTS_REFERENCE, METHOD_REFERENCE, REFERENCE_RESPONSES, TEST_ACCOUNT_PROFILES
 from source.method_api import ApiLogEntry, MethodApiError, MethodClient, build_curl_command
 
 
@@ -24,6 +24,8 @@ def init_session_state() -> None:
         "subscriptions": [],
         "payment_instruments": [],
         "payment": None,
+        "selected_test_phone": DEFAULT_BORROWER["phone"],
+        "applied_test_phone": DEFAULT_BORROWER["phone"],
         "source_account_id": "",
         "webhook_url": "",
         "webhook_auth_token": "",
@@ -56,6 +58,18 @@ def add_log(log: ApiLogEntry) -> None:
     st.session_state["api_logs"].append(log)
 
 
+def get_test_account_profiles() -> list[dict[str, Any]]:
+    return TEST_ACCOUNT_PROFILES
+
+
+def get_test_account_profile(phone: str) -> dict[str, Any] | None:
+    normalized_phone = phone.strip()
+    for profile in TEST_ACCOUNT_PROFILES:
+        if profile.get("phone") == normalized_phone:
+            return dict(profile)
+    return None
+
+
 def has_resource_id(resource: Any) -> bool:
     return isinstance(resource, dict) and bool(resource.get("id"))
 
@@ -67,11 +81,6 @@ def get_connect_product_status() -> dict[str, Any] | None:
         if isinstance(connect_product, dict):
             return connect_product
     return None
-
-
-def is_supported_account(account: dict[str, Any]) -> bool:
-    liability_type = account.get("liability", {}).get("type")
-    return liability_type in set(METHOD_REFERENCE["supported_payment_types"])
 
 
 def get_account_summary(account: dict[str, Any]) -> dict[str, str]:
@@ -183,6 +192,8 @@ def reset_poc() -> None:
         "subscriptions",
         "payment_instruments",
         "payment",
+        "selected_test_phone",
+        "applied_test_phone",
         "source_account_id",
         "webhook_url",
         "webhook_auth_token",

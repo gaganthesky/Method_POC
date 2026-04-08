@@ -15,5 +15,137 @@
   "defaults": {
     "payment_description": "Loan Pmt",
     "payment_amount_usd": "50.00"
-  }
+  },
+  "test_accounts": [
+    {
+      "first_name": "Kevin",
+      "last_name": "Doyle",
+      "email": "kevin.doyle@gmail.com",
+      "phone": "+15121231113",
+      "dob": "1997-03-18",
+      "ssn": "123456789",
+      "line1": "3300 N Interstate 35",
+      "line2": "",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78705"
+    },
+    {
+      "first_name": "Maya",
+      "last_name": "Brooks",
+      "email": "maya.brooks@example.com",
+      "phone": "+15121231111",
+      "dob": "1994-06-12",
+      "ssn": "223456781",
+      "line1": "4100 Speedway",
+      "line2": "Unit 12",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78751"
+    },
+    {
+      "first_name": "Jordan",
+      "last_name": "Reed",
+      "email": "jordan.reed@example.com",
+      "phone": "+15121231121",
+      "dob": "1991-08-25",
+      "ssn": "323456782",
+      "line1": "2201 College Ave",
+      "line2": "",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78704"
+    },
+    {
+      "first_name": "Avery",
+      "last_name": "Hayes",
+      "email": "avery.hayes@example.com",
+      "phone": "+15121231122",
+      "dob": "1996-01-14",
+      "ssn": "423456783",
+      "line1": "1800 Lavaca St",
+      "line2": "Apt 8B",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78701"
+    },
+    {
+      "first_name": "Noah",
+      "last_name": "Parker",
+      "email": "noah.parker@example.com",
+      "phone": "+15121231123",
+      "dob": "1989-11-03",
+      "ssn": "523456784",
+      "line1": "720 W 6th St",
+      "line2": "",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78703"
+    },
+    {
+      "first_name": "Zoe",
+      "last_name": "Collins",
+      "email": "zoe.collins@example.com",
+      "phone": "+15121231124",
+      "dob": "1993-04-19",
+      "ssn": "623456785",
+      "line1": "900 Barton Springs Rd",
+      "line2": "Suite 210",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78704"
+    },
+    {
+      "first_name": "Ethan",
+      "last_name": "Miles",
+      "email": "ethan.miles@example.com",
+      "phone": "+19173019956",
+      "dob": "1988-09-30",
+      "ssn": "723456786",
+      "line1": "55 W 17th St",
+      "line2": "Floor 3",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10011"
+    },
+    {
+      "first_name": "Lena",
+      "last_name": "Foster",
+      "email": "lena.foster@example.com",
+      "phone": "+15121231125",
+      "dob": "1995-02-07",
+      "ssn": "823456787",
+      "line1": "1200 Guadalupe St",
+      "line2": "",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78701"
+    },
+    {
+      "first_name": "Caleb",
+      "last_name": "Turner",
+      "email": "caleb.turner@example.com",
+      "phone": "+15121231126",
+      "dob": "1990-12-11",
+      "ssn": "923456788",
+      "line1": "5000 Burnet Rd",
+      "line2": "Unit 204",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78756"
+    },
+    {
+      "first_name": "Nina",
+      "last_name": "Walsh",
+      "email": "nina.walsh@example.com",
+      "phone": "+15121231127",
+      "dob": "1992-07-22",
+      "ssn": "103456789",
+      "line1": "2600 S Lamar Blvd",
+      "line2": "",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78704"
+    }
+  ]
 }
