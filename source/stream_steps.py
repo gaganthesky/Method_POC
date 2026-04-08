@@ -281,7 +281,7 @@ def render_subscriptions_step() -> None:
         {
             "Selected accounts": str(len(selected_ids)),
             "Webhook URL": st.session_state["webhook_url"] or "Not configured",
-            "Webhook auth token": "Configured" if st.session_state["webhook_auth_token"] else "Missing",
+            "Webhook auth_token": "Generated" if st.session_state["webhook_auth_token"] else "Missing",
         }
     )
 

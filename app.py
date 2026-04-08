@@ -9,7 +9,12 @@ from dotenv import load_dotenv
 from source.config import APP_REFERENCE, METHOD_REFERENCE, STEP_TITLES
 from source.logging import configure_logging
 from source.stream_steps import render_active_step
-from source.stream_util import init_session_state, inject_css, render_api_side_panel, reset_poc
+from source.stream_util import (
+    init_session_state,
+    inject_css,
+    regenerate_webhook_credentials,
+    reset_poc,
+)
 
 
 load_dotenv(dotenv_path=Path(".env"), override=False)
@@ -67,22 +72,37 @@ def render_sidebar() -> None:
         st.session_state["method_version"] = method_version.strip() or METHOD_REFERENCE["default_method_version"]
 
         st.markdown("## Webhooks")
-        st.caption("Step 4 needs a public HTTPS endpoint that returns `200` within five seconds.")
+        st.caption("Method expects a webhook endpoint that returns `200` within five seconds. The app now generates internal webhook credentials for you.")
         st.session_state["webhook_url"] = st.text_input(
             "Webhook URL",
             value=st.session_state["webhook_url"],
-            placeholder="https://your-app.example.com/method/webhook",
+            placeholder=METHOD_REFERENCE["webhook"]["default_local_url"],
         )
-        st.session_state["webhook_auth_token"] = st.text_input(
-            "Webhook auth token",
+        st.text_input(
+            "Webhook internal token",
+            value=st.session_state["webhook_internal_token"],
+            disabled=True,
+            help="Internally generated UUID used as the source value for the auth token.",
+        )
+        st.text_input(
+            "Webhook auth_token payload",
             value=st.session_state["webhook_auth_token"],
-            type="password",
+            disabled=True,
+            help="Base64-encoded internal token sent as `auth_token` in the Method webhook create request.",
+        )
+        st.text_input(
+            "Expected Authorization header",
+            value=st.session_state["webhook_expected_auth_header"],
+            disabled=True,
+            help="Method sends the Authorization header as base64(auth_token). This is the value your receiver should expect with the current generated token.",
         )
         st.session_state["webhook_hmac_secret"] = st.text_input(
             "Webhook HMAC secret",
             value=st.session_state["webhook_hmac_secret"],
-            type="password",
         )
+        if st.button("Regenerate webhook credentials", use_container_width=True):
+            regenerate_webhook_credentials()
+            st.rerun()
 
         st.markdown("## Payments")
         st.caption(
