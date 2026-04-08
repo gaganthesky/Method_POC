@@ -37,7 +37,10 @@ streamlit run app.py
 
 ## Notes
 
-- Reference/demo values live in `reference/app_reference.json` so the code stays free of embedded sample borrower data, base URLs, and flow-specific API defaults.
+- Reference/demo values now live in split JSON files under `reference/`:
+- `common_data.json` for app/common UI data
+- `method_api.json` for Method API defaults and reference responses
+- `test_data.json` for demo borrower and default form values
 - The app defaults to `https://dev.methodfi.com` to match the Citi demo.
 - Step 4 needs a public HTTPS webhook URL plus an auth token.
 - Step 6 is optional and needs an existing Method source account ID for the lender/disbursement account.

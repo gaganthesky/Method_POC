@@ -1,0 +1,21 @@
+{
+  "app": {
+    "page_title": "Method x Citi POC",
+    "page_icon": "\ud83c\udfe6",
+    "hero_kicker": "Citi + Method",
+    "hero_title": "Debt Disbursement POC",
+    "hero_description": "Python + Streamlit implementation of the six-step Method flow: create the borrower, connect liabilities, subscribe to updates, generate payment instruments, and optionally issue a Method payment.",
+    "links": {
+      "demo": "https://citi-demo.methodfi.dev/",
+      "docs": "https://docs.methodfi.com/2025-12-01/reference/introduction"
+    }
+  },
+  "steps": [
+    "Create Entity",
+    "Connect Liabilities",
+    "Retrieve Accounts",
+    "Subscribe Updates",
+    "Payment Instruments",
+    "Disburse Funds"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "demo_borrower": {
+    "first_name": "Kevin",
+    "last_name": "Doyle",
+    "email": "kevin.doyle@gmail.com",
+    "phone": "+15121231113",
+    "dob": "1997-03-18",
+    "ssn": "123456789",
+    "line1": "3300 N Interstate 35",
+    "line2": "",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78705"
+  },
+  "defaults": {
+    "payment_description": "Loan Pmt",
+    "payment_amount_usd": "50.00"
+  }
+}

@@ -1,23 +1,4 @@
 {
-  "app": {
-    "page_title": "Method x Citi POC",
-    "page_icon": "\ud83c\udfe6",
-    "hero_kicker": "Citi + Method",
-    "hero_title": "Debt Disbursement POC",
-    "hero_description": "Python + Streamlit implementation of the six-step Method flow: create the borrower, connect liabilities, subscribe to updates, generate payment instruments, and optionally issue a Method payment.",
-    "steps": [
-      "Create Entity",
-      "Connect Liabilities",
-      "Retrieve Accounts",
-      "Subscribe Updates",
-      "Payment Instruments",
-      "Disburse Funds"
-    ],
-    "links": {
-      "demo": "https://citi-demo.methodfi.dev/",
-      "docs": "https://docs.methodfi.com/2025-12-01/reference/introduction"
-    }
-  },
   "method": {
     "default_base_url": "https://dev.methodfi.com",
     "environment_options": [
@@ -44,23 +25,6 @@
     "subscription_enroll": "update",
     "payment_instrument_type": "inbound_achwire_payment",
     "payment_instrument_response_key": "inbound_achwire_payment"
-  },
-  "demo_borrower": {
-    "first_name": "Kevin",
-    "last_name": "Doyle",
-    "email": "kevin.doyle@gmail.com",
-    "phone": "+15121231113",
-    "dob": "1997-03-18",
-    "ssn": "123456789",
-    "line1": "3300 N Interstate 35",
-    "line2": "",
-    "city": "Austin",
-    "state": "TX",
-    "zip": "78705"
-  },
-  "defaults": {
-    "payment_description": "Loan Pmt",
-    "payment_amount_usd": "50.00"
   },
   "reference_responses": [
     {
