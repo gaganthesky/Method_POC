@@ -4,6 +4,7 @@ import base64
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from typing import Any
 import os
+import random
 import uuid
 
 import streamlit as st
@@ -22,6 +23,9 @@ def init_session_state() -> None:
         "accounts": [],
         "entity_products": None,
         "selected_account_ids": [],
+        "selected_account_amounts": {},
+        "loan_selection_errors": [],
+        "loan_selection_info": "",
         "webhooks": [],
         "subscriptions": [],
         "payment_instruments": [],
@@ -37,6 +41,7 @@ def init_session_state() -> None:
         "api_key_override": "",
         "base_url": os.getenv("METHOD_BASE_URL", METHOD_REFERENCE["default_base_url"]),
         "method_version": os.getenv("METHOD_VERSION", METHOD_REFERENCE["default_method_version"]),
+        "approved_loan_amount_cents": generate_approved_loan_amount_cents(),
         "payment_description": DEFAULTS_REFERENCE["payment_description"],
         "payment_amount_usd": DEFAULTS_REFERENCE["payment_amount_usd"],
     }
@@ -65,6 +70,14 @@ def add_log(log: ApiLogEntry) -> None:
 
 def generate_webhook_internal_token() -> str:
     return str(uuid.uuid4())
+
+
+def generate_approved_loan_amount_cents() -> int:
+    loan_defaults = DEFAULTS_REFERENCE["approved_loan_amount"]
+    min_usd = int(loan_defaults["min_usd"])
+    max_usd = int(loan_defaults["max_usd"])
+    interval_usd = int(loan_defaults["interval_usd"])
+    return random.randrange(min_usd, max_usd + interval_usd, interval_usd) * 100
 
 
 def generate_webhook_hmac_secret() -> str:
@@ -117,9 +130,9 @@ def get_connect_product_status() -> dict[str, Any] | None:
     return None
 
 
-def get_account_summary(account: dict[str, Any]) -> dict[str, str]:
+def get_account_update_product(account: dict[str, Any]) -> dict[str, Any]:
     update = account.get("update") or {}
-    product = (
+    return (
         update.get("credit_card")
         or update.get("personal_loan")
         or update.get("auto_loan")
@@ -127,6 +140,21 @@ def get_account_summary(account: dict[str, Any]) -> dict[str, str]:
         or update.get("student_loans")
         or {}
     )
+
+
+def get_account_balance_cents(account: dict[str, Any]) -> int | None:
+    product = get_account_update_product(account)
+    balance = product.get("balance")
+    if balance in (None, ""):
+        return None
+    try:
+        return int(balance)
+    except (TypeError, ValueError):
+        return None
+
+
+def get_account_summary(account: dict[str, Any]) -> dict[str, str]:
+    product = get_account_update_product(account)
 
     apr = product.get("interest_rate_percentage")
     if apr is None:
@@ -148,17 +176,98 @@ def format_cents(value: Any) -> str:
     except InvalidOperation:
         return "—"
     dollars = cents / Decimal("100")
-    return f"${dollars:,.2f}"
+    sign = "-" if dollars < 0 else ""
+    return f"{sign}${abs(dollars):,.2f}"
 
 
 def parse_dollars_to_cents(value: str) -> int | None:
     try:
-        dollars = Decimal(value).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        normalized = str(value).strip().replace("$", "").replace(",", "")
+        dollars = Decimal(normalized).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     except (InvalidOperation, TypeError):
         return None
     if dollars <= 0:
         return None
     return int((dollars * Decimal("100")).to_integral_value(rounding=ROUND_HALF_UP))
+
+
+def cents_to_dollar_string(value: int | None) -> str:
+    if value in (None, ""):
+        return ""
+    try:
+        cents = Decimal(str(value))
+    except InvalidOperation:
+        return ""
+    dollars = cents / Decimal("100")
+    return f"{dollars:.2f}"
+
+
+def get_selected_account_amounts() -> dict[str, int]:
+    selected_amounts = st.session_state.get("selected_account_amounts", {})
+    if not isinstance(selected_amounts, dict):
+        return {}
+    sanitized: dict[str, int] = {}
+    for account_id, amount in selected_amounts.items():
+        try:
+            amount_cents = int(amount)
+        except (TypeError, ValueError):
+            continue
+        if amount_cents > 0:
+            sanitized[account_id] = amount_cents
+    return sanitized
+
+
+def get_total_selected_account_amount_cents() -> int:
+    return sum(get_selected_account_amounts().values())
+
+
+def get_available_loan_funds_cents() -> int:
+    approved_cents = int(st.session_state.get("approved_loan_amount_cents", 0))
+    return approved_cents - get_total_selected_account_amount_cents()
+
+
+def render_loan_funds_side_panel() -> None:
+    approved_cents = int(st.session_state["approved_loan_amount_cents"])
+    selected_cents = get_total_selected_account_amount_cents()
+    available_cents = approved_cents - selected_cents
+    selected_count = len(st.session_state.get("selected_account_ids", []))
+    panel_value_class = "loan-panel-value"
+    if available_cents < 0:
+        panel_value_class += " is-negative"
+
+    alert_blocks: list[str] = []
+    selection_info = str(st.session_state.get("loan_selection_info", "")).strip()
+    selection_errors = st.session_state.get("loan_selection_errors", [])
+    if available_cents < 0:
+        alert_blocks.append(
+            f"<div class='loan-panel-alert loan-panel-alert-error'>Over selected by {format_cents(abs(available_cents))}. "
+            "Reduce a selected amount or deselect a liability.</div>"
+        )
+    elif selection_info:
+        alert_blocks.append(f"<div class='loan-panel-alert loan-panel-alert-info'>{selection_info}</div>")
+
+    if isinstance(selection_errors, list):
+        for error in selection_errors[:3]:
+            alert_blocks.append(f"<div class='loan-panel-alert loan-panel-alert-error'>{error}</div>")
+
+    alert_markup = "".join(alert_blocks)
+
+    st.markdown(
+        f"""
+        <div class="loan-panel-fixed">
+          <div class="loan-panel">
+            <div class="loan-panel-kicker">Funding Snapshot</div>
+            <div class="loan-panel-title">Available Loan Funds</div>
+            <div class="{panel_value_class}">{format_cents(available_cents)}</div>
+            <div class="loan-panel-row"><span>Approved Loan Amount</span><strong>{format_cents(approved_cents)}</strong></div>
+            <div class="loan-panel-row"><span>Selected Liability Amount</span><strong>{format_cents(selected_cents)}</strong></div>
+            <div class="loan-panel-row"><span>Selected Liabilities</span><strong>{selected_count}</strong></div>
+            {alert_markup}
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def format_account_option(account: dict[str, Any] | None) -> str:
@@ -204,6 +313,9 @@ def render_invalid_state(resource_name: str, payload: Any) -> None:
             st.session_state["accounts"] = []
             st.session_state["entity_products"] = None
             st.session_state["selected_account_ids"] = []
+            st.session_state["selected_account_amounts"] = {}
+            st.session_state["loan_selection_errors"] = []
+            st.session_state["loan_selection_info"] = ""
             st.session_state["webhooks"] = []
             st.session_state["subscriptions"] = []
             st.session_state["payment_instruments"] = []
@@ -222,6 +334,9 @@ def reset_poc() -> None:
         "accounts",
         "entity_products",
         "selected_account_ids",
+        "selected_account_amounts",
+        "loan_selection_errors",
+        "loan_selection_info",
         "webhooks",
         "subscriptions",
         "payment_instruments",
@@ -234,6 +349,7 @@ def reset_poc() -> None:
         "webhook_auth_token",
         "webhook_expected_auth_header",
         "webhook_hmac_secret",
+        "approved_loan_amount_cents",
         "payment_description",
         "payment_amount_usd",
     ]
@@ -243,6 +359,10 @@ def reset_poc() -> None:
 
     account_checkbox_keys = [key for key in st.session_state if key.startswith("account_select_")]
     for key in account_checkbox_keys:
+        del st.session_state[key]
+
+    account_amount_keys = [key for key in st.session_state if key.startswith("account_amount_")]
+    for key in account_amount_keys:
         del st.session_state[key]
 
     init_session_state()
@@ -375,6 +495,69 @@ def inject_css() -> None:
           padding: 1rem 1.1rem;
           box-shadow: var(--soft-shadow);
         }
+        [data-testid="column"]:has(.loan-panel-fixed) {
+          align-self: flex-start !important;
+        }
+        .loan-panel-fixed {
+          position: fixed;
+          top: 4.85rem;
+          right: 1.35rem;
+          width: min(24rem, calc(100vw - 2rem));
+          z-index: 20;
+        }
+        .loan-panel {
+          background: var(--surface);
+          border: 1px solid var(--border-subtle);
+          border-radius: 24px;
+          padding: 1.1rem 1.15rem;
+          box-shadow: var(--soft-shadow);
+        }
+        .loan-panel-kicker {
+          color: var(--text-soft);
+          font-size: 0.74rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          margin-bottom: 0.45rem;
+        }
+        .loan-panel-title {
+          color: var(--text-muted);
+          font-size: 0.95rem;
+          font-weight: 700;
+        }
+        .loan-panel-value {
+          color: var(--text-strong);
+          font-size: clamp(1.9rem, 3vw, 2.55rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          margin: 0.2rem 0 0.95rem;
+        }
+        .loan-panel-value.is-negative { color: #ffb4b4; }
+        .loan-panel-row {
+          display: flex;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 0.5rem 0;
+          border-top: 1px solid var(--border-subtle);
+        }
+        .loan-panel-row span { color: var(--text-muted); }
+        .loan-panel-row strong { color: var(--text-strong); }
+        .loan-panel-alert {
+          margin-top: 0.75rem;
+          border-radius: 16px;
+          padding: 0.8rem 0.9rem;
+          font-weight: 600;
+        }
+        .loan-panel-alert-error {
+          background: rgba(179, 59, 59, 0.16);
+          border: 1px solid rgba(179, 59, 59, 0.32);
+          color: #f6c7c7;
+        }
+        .loan-panel-alert-info {
+          background: rgba(11, 77, 180, 0.14);
+          border: 1px solid rgba(11, 77, 180, 0.22);
+          color: var(--text-strong);
+        }
         .summary-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.35rem 0; font-size: 0.95rem; }
         .summary-row span { color: var(--text-muted); }
         .summary-row strong { color: var(--text-strong); }
@@ -453,6 +636,12 @@ def inject_css() -> None:
           overflow: hidden;
           border: 1px solid var(--border-subtle);
           box-shadow: var(--soft-shadow);
+        }
+        @media (max-width: 1100px) {
+          .loan-panel-fixed {
+            position: static;
+            width: 100%;
+          }
         }
         @media (max-width: 900px) { .account-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
         @media (max-width: 640px) { .hero-card { padding: 1.2rem 1.15rem; } .hero-card p { font-size: 0.96rem; } }

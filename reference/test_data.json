@@ -14,7 +14,12 @@
   },
   "defaults": {
     "payment_description": "Loan Pmt",
-    "payment_amount_usd": "50.00"
+    "payment_amount_usd": "50.00",
+    "approved_loan_amount": {
+      "min_usd": 10000,
+      "max_usd": 50000,
+      "interval_usd": 500
+    }
   },
   "test_accounts": [
     {

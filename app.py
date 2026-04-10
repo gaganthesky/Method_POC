@@ -13,6 +13,7 @@ from source.stream_util import (
     init_session_state,
     inject_css,
     regenerate_webhook_credentials,
+    render_loan_funds_side_panel,
     reset_poc,
 )
 
@@ -38,8 +39,8 @@ def main() -> None:
         render_header()
         render_step_progress()
         render_active_step()
-    #with right:
-     #   render_api_side_panel()
+    with right:
+        render_loan_funds_side_panel()
 
 
 def render_sidebar() -> None:
