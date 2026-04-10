@@ -20,7 +20,11 @@
     ],
     "subscription_enroll": "update",
     "payment_instrument_type": "inbound_achwire_payment",
-    "payment_instrument_response_key": "inbound_achwire_payment"
+    "payment_instrument_response_key": "inbound_achwire_payment",
+    "webhook": {
+      "default_local_url": "https://localhost:8787/method/webhook",
+      "default_hmac_secret_prefix": "method-hmac"
+    }
   },
   "reference_responses": [
     {

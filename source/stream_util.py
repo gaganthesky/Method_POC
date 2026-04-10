@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import base64
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from typing import Any
 import os
+import uuid
 
 import streamlit as st
 
@@ -27,9 +29,11 @@ def init_session_state() -> None:
         "selected_test_phone": DEFAULT_BORROWER["phone"],
         "applied_test_phone": DEFAULT_BORROWER["phone"],
         "source_account_id": "",
-        "webhook_url": "",
+        "webhook_url": METHOD_REFERENCE["webhook"]["default_local_url"],
+        "webhook_internal_token": generate_webhook_internal_token(),
         "webhook_auth_token": "",
-        "webhook_hmac_secret": "",
+        "webhook_expected_auth_header": "",
+        "webhook_hmac_secret": generate_webhook_hmac_secret(),
         "api_key_override": "",
         "base_url": os.getenv("METHOD_BASE_URL", METHOD_REFERENCE["default_base_url"]),
         "method_version": os.getenv("METHOD_VERSION", METHOD_REFERENCE["default_method_version"]),
@@ -39,6 +43,7 @@ def init_session_state() -> None:
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
+    refresh_webhook_state()
 
 
 def build_client() -> MethodClient | None:
@@ -56,6 +61,35 @@ def build_client() -> MethodClient | None:
 
 def add_log(log: ApiLogEntry) -> None:
     st.session_state["api_logs"].append(log)
+
+
+def generate_webhook_internal_token() -> str:
+    return str(uuid.uuid4())
+
+
+def generate_webhook_hmac_secret() -> str:
+    return f"{METHOD_REFERENCE['webhook']['default_hmac_secret_prefix']}-{uuid.uuid4()}"
+
+
+def base64_encode(value: str) -> str:
+    return base64.b64encode(value.encode("utf-8")).decode("utf-8")
+
+
+def refresh_webhook_state() -> None:
+    internal_token = st.session_state.get("webhook_internal_token", "")
+    if not internal_token:
+        internal_token = generate_webhook_internal_token()
+        st.session_state["webhook_internal_token"] = internal_token
+
+    auth_token = base64_encode(internal_token)
+    st.session_state["webhook_auth_token"] = auth_token
+    st.session_state["webhook_expected_auth_header"] = base64_encode(auth_token)
+
+
+def regenerate_webhook_credentials() -> None:
+    st.session_state["webhook_internal_token"] = generate_webhook_internal_token()
+    st.session_state["webhook_hmac_secret"] = generate_webhook_hmac_secret()
+    refresh_webhook_state()
 
 
 def get_test_account_profiles() -> list[dict[str, Any]]:
@@ -196,7 +230,9 @@ def reset_poc() -> None:
         "applied_test_phone",
         "source_account_id",
         "webhook_url",
+        "webhook_internal_token",
         "webhook_auth_token",
+        "webhook_expected_auth_header",
         "webhook_hmac_secret",
         "payment_description",
         "payment_amount_usd",
