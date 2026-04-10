@@ -10,8 +10,11 @@ from source.stream_util import (
     add_log,
     build_client,
     format_account_option,
+    format_cents,
     get_account_summary,
+    get_account_balance_cents,
     get_connect_product_status,
+    get_selected_account_amounts,
     get_test_account_profile,
     get_test_account_profiles,
     has_resource_id,
@@ -201,7 +204,9 @@ def render_accounts_step() -> None:
         return
 
     st.subheader("Retrieve Accounts")
-    st.write("Load liability accounts, inspect the returned balances/update data, and choose which accounts to pay.")
+    st.write(
+        "Load liability accounts, inspect the returned balances/update data, and choose how much of each liability to pay."
+    )
 
     if not st.session_state["accounts"]:
         st.info("No accounts loaded yet.")
@@ -210,23 +215,51 @@ def render_accounts_step() -> None:
         return
 
     accounts = st.session_state["accounts"]
-    selected_ids: list[str] = []
+    approved_cents = int(st.session_state["approved_loan_amount_cents"])
 
-    metric_col1, metric_col2, metric_col3 = st.columns(3)
-    metric_col1.metric("Accounts found", len(accounts))
-    metric_col2.metric("Selectable accounts", len(accounts))
-    metric_col3.metric("Currently selected", len(st.session_state["selected_account_ids"]))
+    for account in accounts:
+        account_id = account["id"]
+        checkbox_key = f"account_select_{account_id}"
+        amount_key = f"account_amount_{account_id}"
+        if checkbox_key not in st.session_state:
+            st.session_state[checkbox_key] = account_id in st.session_state["selected_account_ids"]
+        if amount_key not in st.session_state:
+            st.session_state[amount_key] = ""
+
+    current_snapshot: dict[str, dict[str, int | bool]] = {}
+    current_total_cents = 0
+    for account in accounts:
+        account_id = account["id"]
+        checkbox_key = f"account_select_{account_id}"
+        amount_key = f"account_amount_{account_id}"
+        is_selected = bool(st.session_state[checkbox_key])
+        amount_cents = parse_dollars_to_cents(str(st.session_state[amount_key]).strip()) or 0
+        current_snapshot[account_id] = {
+            "selected": is_selected,
+            "amount_cents": amount_cents,
+        }
+        if is_selected:
+            current_total_cents += amount_cents
+
+    selected_ids: list[str] = []
+    selected_amounts: dict[str, int] = {}
+    validation_errors: list[str] = []
+    total_requested_cents = 0
 
     st.markdown("<div class='spacer-12'></div>", unsafe_allow_html=True)
 
     for account in accounts:
         account_id = account["id"]
         liability = account.get("liability", {})
-        key = f"account_select_{account_id}"
-        if key not in st.session_state:
-            st.session_state[key] = account_id in st.session_state["selected_account_ids"]
+        checkbox_key = f"account_select_{account_id}"
+        amount_key = f"account_amount_{account_id}"
+        is_selected = bool(current_snapshot[account_id]["selected"])
+        current_amount_cents = int(current_snapshot[account_id]["amount_cents"])
+        locked_excluded_amount = current_amount_cents if is_selected else 0
+        control_locked = approved_cents - (current_total_cents - locked_excluded_amount) <= 0 and not is_selected
 
         summary = get_account_summary(account)
+        balance_cents = get_account_balance_cents(account)
         st.markdown(
             f"""
             <div class="account-card">
@@ -247,19 +280,67 @@ def render_accounts_step() -> None:
             """,
             unsafe_allow_html=True,
         )
-        checked = st.checkbox(
+        control_col1, control_col2 = st.columns([0.95, 1.15])
+        checked = control_col1.checkbox(
             f"Select {liability.get('name', account_id)}",
-            key=key,
+            key=checkbox_key,
+            disabled=control_locked,
+        )
+        control_col2.text_input(
+            f"Amount to pay for {liability.get('name', account_id)} (USD)",
+            key=amount_key,
+            placeholder="0.00",
+            help=f"Enter any positive amount up to the balance of {summary.get('balance', '—')}.",
+            disabled=control_locked,
         )
         if checked:
             selected_ids.append(account_id)
+            amount_cents = parse_dollars_to_cents(str(st.session_state[amount_key]).strip())
+            if amount_cents is None:
+                validation_errors.append(
+                    f"Enter a valid payment amount for {liability.get('name', account_id)} before continuing."
+                )
+            else:
+                selected_amounts[account_id] = amount_cents
+                total_requested_cents += amount_cents
+                if balance_cents is not None and amount_cents > balance_cents:
+                    validation_errors.append(
+                        f"{liability.get('name', account_id)} exceeds the available balance of {summary.get('balance', '—')}."
+                    )
 
     st.session_state["selected_account_ids"] = selected_ids
+    st.session_state["selected_account_amounts"] = selected_amounts
+    st.session_state["loan_selection_errors"] = validation_errors
+
+    remaining_cents = approved_cents - total_requested_cents
+
+    metric_col1, metric_col2 = st.columns(2)
+    metric_col1.metric("Accounts found", len(accounts))
+    metric_col2.metric("Selected liabilities", len(selected_ids))
+
+    if remaining_cents < 0:
+        st.session_state["loan_selection_info"] = ""
+        st.error(
+            f"Selected payoff amounts exceed the approved loan funds by {format_cents(abs(remaining_cents))}. "
+            "Reduce one or more liability amounts to continue."
+        )
+    elif remaining_cents == 0 and selected_ids:
+        st.session_state["loan_selection_info"] = (
+            "Approved loan funds are fully allocated. Deselect a liability or reduce a selected amount to free capacity."
+        )
+        st.info("Approved loan funds are fully allocated. Deselect a liability or reduce a selected amount to free capacity.")
+    else:
+        st.session_state["loan_selection_info"] = ""
+
+    for error in validation_errors:
+        st.error(error)
+
+    can_continue = bool(selected_ids) and not validation_errors and remaining_cents >= 0
 
     if st.button(
-        f"Continue with {len(selected_ids)} account(s) →",
+        f"Continue with {len(selected_ids)} liability selection(s) →",
         use_container_width=True,
-        disabled=not selected_ids,
+        disabled=not can_continue,
     ):
         st.session_state["current_step"] = 3
         st.rerun()
@@ -346,6 +427,12 @@ def render_payment_instruments_step() -> None:
 
     st.subheader("Payment Instruments")
     st.write("Generate inbound ACH/Wire details for each selected liability account.")
+    show_summary_card(
+        {
+            "Selected accounts": str(len(selected_ids)),
+            "Payment instruments pending": str(len(st.session_state["payment_instruments"])),
+        }
+    )
 
     if st.session_state["payment_instruments"]:
         render_payment_instrument_table()
@@ -380,11 +467,18 @@ def render_payment_instruments_step() -> None:
 def render_disbursement_step() -> None:
     payment_instruments = st.session_state["payment_instruments"]
     selected_ids = st.session_state["selected_account_ids"]
+    selected_amounts = get_selected_account_amounts()
     accounts = {account["id"]: account for account in st.session_state["accounts"]}
 
     st.subheader("Disburse Funds")
     st.write(
         "This screen mirrors the demo's final step. For Citi's real-world flow, the routing/account numbers below can be used for outbound disbursement. If you also have a Method source account, you can create a Method `/payments` record here."
+    )
+    show_summary_card(
+        {
+            "Selected accounts": str(len(selected_ids)),
+            "Payment instruments ready": str(len(payment_instruments)),
+        }
     )
 
     if payment_instruments:
@@ -403,6 +497,9 @@ def render_disbursement_step() -> None:
 
     destination_label = st.selectbox("Destination account", list(account_options.keys()))
     destination_account_id = account_options[destination_label]
+    selected_destination_amount = selected_amounts.get(destination_account_id)
+    if selected_destination_amount is not None:
+        st.caption(f"Selected payoff amount for this liability: {format_cents(selected_destination_amount)}")
 
     col1, col2 = st.columns(2)
     st.session_state["payment_amount_usd"] = col1.text_input(
@@ -428,6 +525,12 @@ def render_disbursement_step() -> None:
     disabled = source_account_id == "" or amount_cents is None
     if amount_cents is None:
         st.error("Enter a valid payment amount such as `50.00`.")
+    elif selected_destination_amount is not None and amount_cents > selected_destination_amount:
+        st.error(
+            f"Payment amount cannot exceed the selected payoff amount of {format_cents(selected_destination_amount)} "
+            f"for {destination_label}."
+        )
+        disabled = True
 
     if st.button("Create Method payment →", use_container_width=True, disabled=disabled):
         client = build_client()
@@ -452,6 +555,7 @@ def render_disbursement_step() -> None:
 
 def render_payment_instrument_table() -> None:
     accounts = {account["id"]: account for account in st.session_state["accounts"]}
+    selected_amounts = get_selected_account_amounts()
     rows = []
     for instrument in st.session_state["payment_instruments"]:
         account = accounts.get(instrument["account_id"], {})
@@ -462,6 +566,7 @@ def render_payment_instrument_table() -> None:
                 "Account": liability.get("name", instrument["account_id"]),
                 "Type": liability.get("type", "liability"),
                 "Method account ID": instrument["account_id"],
+                "Selected pay amount": format_cents(selected_amounts.get(instrument["account_id"])),
                 "Payment instrument ID": instrument["id"],
                 "Routing number": inbound.get("routing_number", "—"),
                 "Account number": inbound.get("account_number", "—"),
@@ -492,7 +597,10 @@ def fetch_accounts(entity_id: str) -> None:
     add_log(log)
     st.session_state["accounts"] = accounts
     for account in accounts:
-        key = f"account_select_{account['id']}"
-        if key not in st.session_state:
-            st.session_state[key] = False
+        checkbox_key = f"account_select_{account['id']}"
+        amount_key = f"account_amount_{account['id']}"
+        if checkbox_key not in st.session_state:
+            st.session_state[checkbox_key] = False
+        if amount_key not in st.session_state:
+            st.session_state[amount_key] = ""
     st.rerun()
